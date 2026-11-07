@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kinanti PhotoBook Studio - Professional Family Edition</title>
+    <style>
+        :root {
+            --primary: #2b8a3e;
+            --primary-hover: #237032;
+            --primary-light: #ebfbee;
+            --secondary: #1971c2;
+            --danger: #e03131;
+            --bg-body: #f1f3f5;
+            --surface: #ffffff;
+            --text-main: #212529;
+            --text-muted: #6c757d;
+            --border: #dee2e6;
+            --radius: 12px;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+            --shadow-book: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 1. HEADER & IDENTITAS */
+        .app-header {
+            background: var(--surface);
+            padding: 16px 32px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .header-brand h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .header-brand p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .dev-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #f8f9fa;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #343a40;
+            border: 1px solid var(--border);
+            margin-top: 6px;
+            width: fit-content;
+        }
+
+        .blink-dot {
+            width: 9px;
+            height: 9px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulseBlink 1.4s infinite ease-in-out;
+        }
+
+        @keyframes pulseBlink {
+            0%, 100% {
+                opacity: 0.25;
+                transform: scale(0.85);
+                box-shadow: 0 0 0 rgba(43, 138, 62, 0);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+                box-shadow: 0 0 10px rgba(43, 138, 62, 0.8);
+            }
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* 2. DASHBOARD WORKSPACE */
+        .workspace {
+            display: grid;
+            grid-template-columns: 310px 1fr 290px;
+            gap: 20px;
+            padding: 20px 32px;
+            max-width: 1600px;
+            width: 100%;
+            margin: 0 auto;
+            flex: 1;
+        }
+
+        @media (max-width: 1200px) {
+            .workspace {
+                grid-template-columns: 300px 1fr;
+            }
+            .panel-right {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media (max-width: 820px) {
+            .workspace {
+                grid-template-columns: 1fr;
+                padding: 16px;
+            }
+            .app-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 14px;
+            }
+        }
+
+        .panel {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            height: fit-content;
+        }
+
+        .panel-title {
+            font-size: 1rem;
+            font-weight: 700;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--bg-body);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .form-control {
+            padding: 9px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            outline: none;
+            background: #fff;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+        }
+
+        /* BUTTONS */
+        .btn {
+            padding: 9px 14px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background: #1864ab;
+        }
+
+        .btn-outline {
+            background: #fff;
+            color: var(--text-main);
+            border-color: var(--border);
+        }
+
+        .btn-outline:hover {
+            background: var(--bg-body);
+            border-color: #adb5bd;
+        }
+
+        .btn-sm {
+            padding: 5px 8px;
+            font-size: 0.75rem;
+        }
+
+        /* UPLOAD & GALLERY */
+        .upload-zone {
+            border: 2px dashed #adb5bd;
+            border-radius: 10px;
+            padding: 20px 12px;
+            text-align: center;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .upload-zone:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .upload-zone p {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            max-height: 250px;
+            overflow-y: auto;
+            padding: 4px;
+        }
+
+        .gallery-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 2px solid var(--border);
+            group: gallery;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-remove {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: rgba(224, 49, 49, 0.9);
+            color: #fff;
+            border: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            font-size: 11px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 3. STUDIO CANVAS & FLIP SIMULATOR */
+        .studio-center {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .studio-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .template-pills {
+            display: flex;
+            gap: 6px;
+        }
+
+        .pill-btn {
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: #f8f9fa;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .pill-btn.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .book-viewport {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 10px;
+            perspective: 1600px;
+            min-height: 440px;
+            background: radial-gradient(circle, #ffffff 0%, #e9ecef 100%);
+            border-radius: 10px;
+        }
+
+        .book-spread {
+            width: 100%;
+            max-width: 820px;
+            aspect-ratio: 16 / 10;
+            background: #fff;
+            border-radius: 6px;
+            box-shadow: var(--shadow-book);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            position: relative;
+            border: 6px solid #343a40;
+            transform-style: preserve-3d;
+            transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease;
+        }
+
+        .book-spread.flipping-next {
+            transform: rotateY(-12deg) scale(0.97);
+            opacity: 0.85;
+        }
+
+        .book-spread.flipping-prev {
+            transform: rotateY(12deg) scale(0.97);
+            opacity: 0.85;
+        }
+
+        /* Lipatan Tengah Buku (Spine) */
+        .book-spread::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 28px;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg, 
+                rgba(0,0,0,0.02) 0%, 
+                rgba(0,0,0,0.16) 45%, 
+                rgba(255,255,255,0.2) 50%, 
+                rgba(0,0,0,0.14) 55%, 
+                rgba(0,0,0,0.02) 100%);
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .album-page {
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            background: #fffdf9;
+        }
+
+        .album-page.left-page {
+            border-right: 1px solid #dee2e6;
+        }
+
+        .page-header-meta {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #adb5bd;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .page-canvas {
+            flex: 1;
+            margin: 10px 0;
+            display: grid;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* 3 Template Styles */
+        .layout-classic {
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr;
+            padding: 8px;
+        }
+
+        .layout-modern {
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+        }
+
+        .layout-storyboard {
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr 1fr;
+        }
+
+        .photo-slot {
+            width: 100%;
+            height: 100%;
+            background: #f1f3f5;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+            border: 3px solid #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .photo-slot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .caption-input {
+            width: 100%;
+            border: none;
+            border-top: 1px solid #eee;
+            background: rgba(255, 255, 255, 0.92);
+            font-size: 0.75rem;
+            padding: 5px 8px;
+            text-align: center;
+            color: #495057;
+            outline: none;
+        }
+
+        .caption-input:focus {
+            background: #fff9db;
+        }
+
+        .page-number {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .flip-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 8px;
+        }
+
+        /* 4. PAGE SEQUENCE & ORDER MANAGER */
+        .page-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 450px;
+            overflow-y: auto;
+        }
+
+        .page-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .page-card.active {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .page-card-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .page-card-info strong {
+            font-size: 0.84rem;
+        }
+
+        .page-card-info span {
+            font-size: 0.73rem;
+            color: var(--text-muted);
+        }
+
+        .page-card-actions {
+            display: flex;
+            gap: 4px;
+        }
+
+        /* PRINT / PDF READY MODE */
+        #printContainer {
+            display: none;
+        }
+
+        @media print {
+            body {
+                background: #fff;
+            }
+            .app-header, .workspace {
+                display: none !important;
+            }
+            #printContainer {
+                display: block !important;
+                width: 100%;
+            }
+            .print-sheet {
+                page-break-after: always;
+                width: 100%;
+                height: 92vh;
+                padding: 24px;
+                border: 1px solid #ccc;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. HEADER & IDENTITAS -->
+    <header class="app-header">
+        <div class="header-brand">
+            <h1>Kinanti PhotoBook Studio</h1>
+            <p>Rangkai momen berharga keluarga dengan sentuhan profesional</p>
+            <div class="dev-badge" title="Status Sistem: Aktif & Siap Digunakan">
+                <span class="blink-dot"></span>
+                <span>developer : fatur62</span>
+            </div>
+        </div>
+
+        <div class="header-actions">
+            <input type="file" id="importJsonInput" accept=".json" style="display: none;">
+            <button class="btn btn-outline" id="btnImportJson">Muat Proyek (JSON)</button>
+            <button class="btn btn-outline" id="btnExportJson">Simpan Proyek (JSON)</button>
+            <button class="btn btn-primary" id="btnPrintPdf">Export PDF / Siap Cetak</button>
+        </div>
+    </header>
+
+    <!-- 2. DASHBOARD UTAMA -->
+    <main class="workspace">
+        
+        <!-- PANEL KIRI: UPLOAD & AUTO-LAYOUT -->
+        <aside class="panel">
+            <div class="panel-title">
+                <span>1. Galeri & Auto-Layout</span>
+                <span id="photoCounter" style="font-size: 0.8rem; color: var(--primary);">0 Foto</span>
+            </div>
+
+            <div class="form-group">
+                <label for="albumTitleInput">Judul Album Keluarga</label>
+                <input type="text" id="albumTitleInput" class="form-control" value="Kenangan Manis Keluarga">
+            </div>
+
+            <div class="form-group">
+                <label for="defaultTemplateSelect">Gaya Template Default</label>
+                <select id="defaultTemplateSelect" class="form-control">
+                    <option value="classic">Classic (1 Foto Besar + Caption)</option>
+                    <option value="modern">Modern Grid (4 Foto Kolase)</option>
+                    <option value="storyboard">Storyboard (2 Foto Cerita)</option>
+                </select>
+            </div>
+
+            <div class="upload-zone" id="dropZone">
+                <strong>+ Unggah Foto Keluarga</strong>
+                <p>Klik atau tarik foto ke area ini (JPG, PNG, WEBP)</p>
+                <input type="file" id="photoInput" accept="image/*" multiple style="display: none;">
+            </div>
+
+            <div class="gallery-grid" id="galleryGrid"></div>
+
+            <div style="display: flex; gap: 8px; flex-direction: column;">
+                <button class="btn btn-primary" id="btnAutoLayout">Susun Otomatis (Auto-Layout)</button>
+                <button class="btn btn-outline" id="btnLoadDemo">Muat Contoh Foto Keluarga</button>
+            </div>
+        </aside>
+
+        <!-- PANEL TENGAH: STUDIO CANVAS & LIVE FLIP SIMULATOR -->
+        <section class="studio-center">
+            <div class="studio-toolbar">
+                <div>
+                    <strong style="font-size: 0.9rem;">Gaya Halaman Aktif:</strong>
+                </div>
+                <div class="template-pills" id="activeTemplatePills">
+                    <button class="pill-btn active" data-style="classic">Classic</button>
+                    <button class="pill-btn" data-style="modern">Modern Grid</button>
+                    <button class="pill-btn" data-style="storyboard">Storyboard</button>
+                </div>
+            </div>
+
+            <!-- Book Spread Simulator -->
+            <div class="book-viewport">
+                <div class="book-spread" id="bookSpread">
+                    <!-- Halaman Kiri -->
+                    <div class="album-page left-page" id="leftPageContainer"></div>
+                    <!-- Halaman Kanan -->
+                    <div class="album-page right-page" id="rightPageContainer"></div>
+                </div>
+            </div>
+
+            <!-- Navigasi Flip Halaman -->
+            <div class="flip-controls">
+                <button class="btn btn-outline" id="btnPrevSpread">&larr; Buka Halaman Sebelumnya</button>
+                <span id="spreadIndicator" style="font-size: 0.9rem; font-weight: 700;">Spread 1 / 1</span>
+                <button class="btn btn-outline" id="btnNextSpread">Buka Halaman Berikutnya &rarr;</button>
+            </div>
+        </section>
+
+        <!-- PANEL KANAN: PENGATUR URUTAN HALAMAN -->
+        <aside class="panel panel-right">
+            <div class="panel-title">
+                <span>2. Urutan Halaman</span>
+                <button class="btn btn-outline btn-sm" id="btnAddBlankPage">+ Halaman</button>
+            </div>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">
+                Atur urutan halaman album (Naik/Turun) atau klik untuk mengedit langsung.
+            </p>
+            <div class="page-list" id="pageOrderList"></div>
+        </aside>
+
+    </main>
+
+    <!-- CONTAINER KHUSUS CETAK / PDF -->
+    <section id="printContainer"></section>
+
+    <!-- 3. LOGIKA JAVASCRIPT (ES6+ & JSON STATE MANAGEMENT) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // State Utama Aplikasi
+            const appState = {
+                albumTitle: 'Kenangan Manis Keluarga',
+                photos: [], // Array of { id, src, name }
+                pages: [],  // Array of { id, style: 'classic'|'modern'|'storyboard', photoIds: [], caption: '' }
+                currentSpreadIndex: 0 // 1 Spread = 2 Halaman (Kiri & Kanan)
+            };
+
+            // Referensi Elemen DOM
+            const dom = {
+                albumTitleInput: document.getElementById('albumTitleInput'),
+                defaultTemplateSelect: document.getElementById('defaultTemplateSelect'),
+                dropZone: document.getElementById('dropZone'),
+                photoInput: document.getElementById('photoInput'),
+                galleryGrid: document.getElementById('galleryGrid'),
+                photoCounter: document.getElementById('photoCounter'),
+                btnAutoLayout: document.getElementById('btnAutoLayout'),
+                btnLoadDemo: document.getElementById('btnLoadDemo'),
+                activeTemplatePills: document.getElementById('activeTemplatePills'),
+                bookSpread: document.getElementById('bookSpread'),
+                leftPageContainer: document.getElementById('leftPageContainer'),
+                rightPageContainer: document.getElementById('rightPageContainer'),
+                btnPrevSpread: document.getElementById('btnPrevSpread'),
+                btnNextSpread: document.getElementById('btnNextSpread'),
+                spreadIndicator: document.getElementById('spreadIndicator'),
+                pageOrderList: document.getElementById('pageOrderList'),
+                btnAddBlankPage: document.getElementById('btnAddBlankPage'),
+                btnExportJson: document.getElementById('btnExportJson'),
+                btnImportJson: document.getElementById('btnImportJson'),
+                importJsonInput: document.getElementById('importJsonInput'),
+                btnPrintPdf: document.getElementById('btnPrintPdf'),
+                printContainer: document.getElementById('printContainer')
+            };
+
+            // Helper: Buat ID Unik
+            const generateId = (prefix = 'id') => `${prefix}_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+
+            // Helper: Jumlah Slot Foto berdasarkan Gaya Template
+            const getSlotsCountByStyle = (style) => {
+                if (style === 'modern') return 4;
+                if (style === 'storyboard') return 2;
+                return 1; // classic
+            };
+
+            // 1. PENANGANAN UPLOAD FOTO
+            const handleFilesUpload = (fileList) => {
+                if (!fileList || fileList.length === 0) return;
+                const files = Array.from(fileList);
+
+                files.forEach(file => {
+                    if (!file.type.startsWith('image/')) return;
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        try {
+                            const result = e.target?.result;
+                            if (typeof result === 'string') {
+                                appState.photos.push({
+                                    id: generateId('img'),
+                                    src: result,
+                                    name: file.name
+                                });
+                                renderGallery();
+                                if (appState.pages.length === 0) {
+                                    generateAutoLayout();
+                                }
+                            }
+                        } catch (err) {
+                            console.error('Gagal membaca file gambar:', err);
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                });
+            };
+
+            dom.dropZone.addEventListener('click', () => dom.photoInput.click());
+            dom.photoInput.addEventListener('change', (e) => handleFilesUpload(e.target.files));
+
+            dom.dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dom.dropZone.style.borderColor = 'var(--primary)';
+            });
+            dom.dropZone.addEventListener('dragleave', () => {
+                dom.dropZone.style.borderColor = '#adb5bd';
+            });
+            dom.dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dom.dropZone.style.borderColor = '#adb5bd';
+                handleFilesUpload(e.dataTransfer.files);
+            });
+
+            // Render Galeri Foto
+            const renderGallery = () => {
+                dom.galleryGrid.innerHTML = '';
+                dom.photoCounter.textContent = `${appState.photos.length} Foto`;
+
+                appState.photos.forEach((photo) => {
+                    const item = document.createElement('div');
+                    item.className = 'gallery-item';
+                    item.innerHTML = `
+                        <img src="${photo.src}" alt="${photo.name}">
+                        <button class="gallery-remove" title="Hapus foto">&times;</button>
+                    `;
+                    item.querySelector('.gallery-remove').addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        removePhotoById(photo.id);
+                    });
+                    dom.galleryGrid.appendChild(item);
+                });
+            };
+
+            const removePhotoById = (photoId) => {
+                appState.photos = appState.photos.filter(p => p.id !== photoId);
+                appState.pages.forEach(page => {
+                    page.photoIds = page.photoIds.filter(id => id !== photoId);
+                });
+                renderGallery();
+                renderAll();
+            };
+
+            // 2. ENGINE AUTO-LAYOUT OTOMATIS
+            const generateAutoLayout = () => {
+                const chosenStyle = dom.defaultTemplateSelect.value || 'classic';
+                const slotsPerPage = getSlotsCountByStyle(chosenStyle);
+                const newPages = [];
+
+                if (appState.photos.length === 0) {
+                    newPages.push({
+                        id: generateId('page'),
+                        style: chosenStyle,
+                        photoIds: [],
+                        caption: 'Momen bersama keluarga tercinta'
+                    });
+                } else {
+                    for (let i = 0; i < appState.photos.length; i += slotsPerPage) {
+                        const chunk = appState.photos.slice(i, i + slotsPerPage).map(p => p.id);
+                        newPages.push({
+                            id: generateId('page'),
+                            style: chosenStyle,
+                            photoIds: chunk,
+                            caption: `Momen Bahagia #${newPages.length + 1}`
+                        });
+                    }
+                }
+
+                // Pastikan jumlah halaman genap agar pas dibuka kiri-kanan (Book Spread)
+                if (newPages.length % 2 !== 0) {
+                    newPages.push({
+                        id: generateId('page'),
+                        style: chosenStyle,
+                        photoIds: [],
+                        caption: 'Catatan Kenangan Keluarga'
+                    });
+                }
+
+                appState.pages = newPages;
+                appState.currentSpreadIndex = 0;
+                renderAll();
+            };
+
+            dom.btnAutoLayout.addEventListener('click', () => {
+                if (appState.photos.length === 0) {
+                    alert('Unggah foto terlebih dahulu atau klik "Muat Contoh Foto Keluarga".');
+                    return;
+                }
+                generateAutoLayout();
+            });
+
+            // Buat Contoh Foto SVG Otomatis (Tanpa Internet)
+            dom.btnLoadDemo.addEventListener('click', () => {
+                const demoThemes = [
+                    { title: 'Liburan di Pegunungan', bg: '#2b8a3e' },
+                    { title: 'Kumpul Keluarga Besar', bg: '#1971c2' },
+                    { title: 'Makan Malam Bersama', bg: '#e67700' },
+                    { title: 'Senyum Ceria Bimo & Keluarga', bg: '#ae3ec9' },
+                    { title: 'Santai Sore di Teras Rumah', bg: '#0ca678' },
+                    { title: 'Perjalanan Wisata Jawa Tengah', bg: '#d9480f' }
+                ];
+
+                appState.photos = demoThemes.map((item, idx) => {
+                    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="450" viewBox="0 0 600 450">
+                        <rect width="600" height="450" fill="${item.bg}"/>
+                        <circle cx="480" cy="100" r="50" fill="rgba(255,255,255,0.2)"/>
+                        <path d="M0 340 L180 200 L350 330 L460 230 L600 350 L600 450 L0 450 Z" fill="rgba(0,0,0,0.22)"/>
+                        <text x="50%" y="48%" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, sans-serif" font-size="26" font-weight="bold">${item.title}</text>
+                        <text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-family="Segoe UI, sans-serif" font-size="16">Koleksi Foto Keluarga #${idx + 1}</text>
+                    </svg>`;
+                    return {
+                        id: generateId('demo'),
+                        src: `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`,
+                        name: `${item.title}.svg`
+                    };
+                });
+
+                renderGallery();
+                generateAutoLayout();
+            });
+
+            // 3. RENDER STUDIO BOOK SPREAD (KIRI & KANAN)
+            const renderPageContent = (container, pageObj, pageNumber) => {
+                container.innerHTML = '';
+                if (!pageObj) {
+                    container.innerHTML = `<div class="page-number">Akhir Album</div>`;
+                    return;
+                }
+
+                const headerMeta = document.createElement('div');
+                headerMeta.className = 'page-header-meta';
+                headerMeta.innerHTML = `
+                    <span>${appState.albumTitle}</span>
+                    <span>${pageObj.style.toUpperCase()}</span>
+                `;
+
+                const canvas = document.createElement('div');
+                canvas.className = `page-canvas layout-${pageObj.style}`;
+
+                const maxSlots = getSlotsCountByStyle(pageObj.style);
+                for (let s = 0; s < maxSlots; s++) {
+                    const slot = document.createElement('div');
+                    slot.className = 'photo-slot';
+                    const photoId = pageObj.photoIds[s];
+                    const photoObj = appState.photos.find(p => p.id === photoId);
+
+                    if (photoObj) {
+                        slot.innerHTML = `<img src="${photoObj.src}" alt="${photoObj.name}">`;
+                    } else {
+                        slot.innerHTML = `
+                            <div style="margin:auto; text-align:center; padding:10px; color:#adb5bd; font-size:0.75rem;">
+                                Klik untuk isi foto
+                            </div>
+                        `;
+                    }
+
+                    // Klik slot untuk mengganti foto secara berurutan dari galeri
+                    slot.addEventListener('click', () => {
+                        if (appState.photos.length === 0) return;
+                        const currentIdx = appState.photos.findIndex(p => p.id === photoId);
+                        const nextIdx = (currentIdx + 1) % appState.photos.length;
+                        pageObj.photoIds[s] = appState.photos[nextIdx].id;
+                        renderAll();
+                    });
+
+                    canvas.appendChild(slot);
+                }
+
+                const captionInput = document.createElement('input');
+                captionInput.type = 'text';
+                captionInput.className = 'caption-input';
+                captionInput.value = pageObj.caption || '';
+                captionInput.placeholder = 'Tulis cerita singkat momen ini...';
+                captionInput.addEventListener('input', (e) => {
+                    pageObj.caption = e.target.value;
+                });
+
+                const footerNum = document.createElement('div');
+                footerNum.className = 'page-number';
+                footerNum.textContent = `Halaman ${pageNumber}`;
+
+                container.appendChild(headerMeta);
+                container.appendChild(canvas);
+                container.appendChild(captionInput);
+                container.appendChild(footerNum);
+            };
+
+            const renderSpread = () => {
+                const totalSpreads = Math.max(1, Math.ceil(appState.pages.length / 2));
+                if (appState.currentSpreadIndex >= totalSpreads) {
+                    appState.currentSpreadIndex = totalSpreads - 1;
+                }
+
+                const leftIndex = appState.currentSpreadIndex * 2;
+                const rightIndex = leftIndex + 1;
+
+                renderPageContent(dom.leftPageContainer, appState.pages[leftIndex], leftIndex + 1);
+                renderPageContent(dom.rightPageContainer, appState.pages[rightIndex], rightIndex + 1);
+
+                dom.spreadIndicator.textContent = `Spread ${appState.currentSpreadIndex + 1} / ${totalSpreads} (Hal ${leftIndex + 1}-${rightIndex + 1})`;
+
+                // Update status tombol template pill aktif berdasarkan halaman kiri
+                const activeStyle = appState.pages[leftIndex]?.style || 'classic';
+                dom.activeTemplatePills.querySelectorAll('.pill-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.style === activeStyle);
+                });
+            };
+
+            // Ubah Gaya Template pada Spread yang Sedang Aktif
+            dom.activeTemplatePills.querySelectorAll('.pill-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const newStyle = btn.dataset.style;
+                    const leftIdx = appState.currentSpreadIndex * 2;
+                    const rightIdx = leftIdx + 1;
+                    if (appState.pages[leftIdx]) appState.pages[leftIdx].style = newStyle;
+                    if (appState.pages[rightIdx]) appState.pages[rightIdx].style = newStyle;
+                    renderAll();
+                });
+            });
+
+            // 4. ANIMASI FLIP SIMULATOR
+            const triggerFlipAnimation = (direction) => {
+                const animClass = direction === 'next' ? 'flipping-next' : 'flipping-prev';
+                dom.bookSpread.classList.add(animClass);
+                setTimeout(() => {
+                    renderSpread();
+                    renderPageOrderList();
+                    dom.bookSpread.classList.remove(animClass);
+                }, 240);
+            };
+
+            dom.btnPrevSpread.addEventListener('click', () => {
+                if (appState.currentSpreadIndex > 0) {
+                    appState.currentSpreadIndex--;
+                    triggerFlipAnimation('prev');
+                }
+            });
+
+            dom.btnNextSpread.addEventListener('click', () => {
+                const totalSpreads = Math.ceil(appState.pages.length / 2);
+                if (appState.currentSpreadIndex < totalSpreads - 1) {
+                    appState.currentSpreadIndex++;
+                    triggerFlipAnimation('next');
+                }
+            });
+
+            // 5. PENGATUR URUTAN HALAMAN (REORDER & DELETE)
+            const renderPageOrderList = () => {
+                dom.pageOrderList.innerHTML = '';
+                const activeLeftIdx = appState.currentSpreadIndex * 2;
+
+                appState.pages.forEach((page, index) => {
+                    const card = document.createElement('div');
+                    const isCurrentSpread = (index === activeLeftIdx || index === activeLeftIdx + 1);
+                    card.className = `page-card ${isCurrentSpread ? 'active' : ''}`;
+
+                    card.innerHTML = `
+                        <div class="page-card-info">
+                            <strong>Halaman ${index + 1}</strong>
+                            <span>${page.style.toUpperCase()} • ${page.photoIds.length} Foto</span>
+                        </div>
+                        <div class="page-card-actions">
+                            <button class="btn btn-outline btn-sm btn-up" title="Geser Naik">&uarr;</button>
+                            <button class="btn btn-outline btn-sm btn-down" title="Geser Turun">&darr;</button>
+                            <button class="btn btn-outline btn-sm btn-del" title="Hapus Halaman" style="color:var(--danger);">&times;</button>
+                        </div>
+                    `;
+
+                    card.addEventListener('click', () => {
+                        appState.currentSpreadIndex = Math.floor(index / 2);
+                        renderAll();
+                    });
+
+                    card.querySelector('.btn-up').addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        if (index > 0) {
+                            const temp = appState.pages[index - 1];
+                            appState.pages[index - 1] = appState.pages[index];
+                            appState.pages[index] = temp;
+                            renderAll();
+                        }
+                    });
+
+                    card.querySelector('.btn-down').addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        if (index < appState.pages.length - 1) {
+                            const temp = appState.pages[index + 1];
+                            appState.pages[index + 1] = appState.pages[index];
+                            appState.pages[index] = temp;
+                            renderAll();
+                        }
+                    });
+
+                    card.querySelector('.btn-del').addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        if (appState.pages.length <= 2) {
+                            alert('Album minimal memiliki 2 halaman (1 Spread).');
+                            return;
+                        }
+                        appState.pages.splice(index, 1);
+                        renderAll();
+                    });
+
+                    dom.pageOrderList.appendChild(card);
+                });
+            };
+
+            dom.btnAddBlankPage.addEventListener('click', () => {
+                const style = dom.defaultTemplateSelect.value || 'classic';
+                appState.pages.push({
+                    id: generateId('page'),
+                    style: style,
+                    photoIds: [],
+                    caption: `Halaman Baru #${appState.pages.length + 1}`
+                });
+                renderAll();
+            });
+
+            dom.albumTitleInput.addEventListener('input', (e) => {
+                appState.albumTitle = e.target.value.trim() || 'Album Keluarga';
+                renderSpread();
+            });
+
+            // 6. PENANGANAN JSON (SIMPAN & MUAT PROYEK DENGAN VALIDASI AMAN)
+            dom.btnExportJson.addEventListener('click', () => {
+                try {
+                    const payload = JSON.stringify(appState, null, 2);
+                    const blob = new Blob([payload], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `${appState.albumTitle.replace(/\s+/g, '_').toLowerCase()}_fatur62.json`;
+                    link.click();
+                    URL.revokeObjectURL(url);
+                } catch (err) {
+                    console.error('Gagal mengekspor JSON:', err);
+                    alert('Terjadi kesalahan saat menyimpan proyek JSON.');
+                }
+            });
+
+            dom.btnImportJson.addEventListener('click', () => dom.importJsonInput.click());
+
+            dom.importJsonInput.addEventListener('change', (e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const raw = event.target?.result;
+                        if (typeof raw !== 'string') throw new Error('Format file tidak valid.');
+                        const parsed = JSON.parse(raw);
+
+                        // Validasi skema data JSON
+                        if (!parsed || !Array.isArray(parsed.photos) || !Array.isArray(parsed.pages)) {
+                            throw new Error('Struktur JSON proyek tidak sesuai standar Kinanti PhotoBook.');
+                        }
+
+                        appState.albumTitle = typeof parsed.albumTitle === 'string' ? parsed.albumTitle : 'Album Keluarga';
+                        appState.photos = parsed.photos.filter(p => p && typeof p.id === 'string' && typeof p.src === 'string');
+                        appState.pages = parsed.pages.filter(pg => pg && typeof pg.id === 'string' && Array.isArray(pg.photoIds));
+                        appState.currentSpreadIndex = 0;
+
+                        dom.albumTitleInput.value = appState.albumTitle;
+                        renderGallery();
+                        renderAll();
+                    } catch (err) {
+                        console.error('Error parsing JSON:', err);
+                        alert(`Gagal memuat file JSON: ${err.message}`);
+                    }
+                };
+                reader.readAsText(file);
+            });
+
+            // 7. EXPORT PDF / PRINT READY GENERATOR
+            dom.btnPrintPdf.addEventListener('click', () => {
+                dom.printContainer.innerHTML = '';
+                appState.pages.forEach((page, idx) => {
+                    const sheet = document.createElement('div');
+                    sheet.className = 'print-sheet';
+                    renderPageContent(sheet, page, idx + 1);
+                    dom.printContainer.appendChild(sheet);
+                });
+                window.print();
+            });
+
+            // Render Keseluruhan State
+            const renderAll = () => {
+                renderSpread();
+                renderPageOrderList();
+            };
+
+            // Inisialisasi Awal
+            generateAutoLayout();
+        });
+    </script>
+</body>
+</html>
